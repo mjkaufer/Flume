@@ -1,0 +1,7 @@
+Flume
+
+This is Flume, a CMS. To get started, drag flume somewhere, cd to its directory, open the console, and enter 'meteor'. That's it. Then, all you need to do is make an account. The first account created is automatically an admin, so you should be an admin. Set the name of your CMS by inputting it in the text field which appears. 
+
+Todo
+
+Implement new page creation menu
