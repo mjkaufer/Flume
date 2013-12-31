@@ -21,8 +21,7 @@ Meteor.startup(function(){
 
     Session.set('empty', false);
     Session.set('name', "Flume");
-
-
+    // switchTabs('Home');
 
     Meteor.call('getTabs', function(e, r){
 
@@ -30,30 +29,6 @@ Meteor.startup(function(){
       Session.set('tabs', r);
       console.log(r);
 
-      for(i in r){
-        var bn = r[i] + 'bool';
-        if(r[i] == 'Home')
-        Session.set(bn, true);
-        else
-        Session.set(bn, false);
-
-
-        console.log('bn: ' + bn)
-
-
-        // Handlebars.registerHelper(bn + 'e',function(){
-        //   console.log(r[i] + 'bool : handle' + ":" + bn)
-        //   return Session.get(bn);
-        // });
-
-      }
-      // Handlebars.registerHelper('Homeboole', function(){
-      //   return Session.get('Homebool');
-      // })
-
-      Handlebars.registerHelper('test', function(a){
-        return Session.get(a + 'bool');
-      });
 
     });
 
@@ -68,8 +43,9 @@ Meteor.startup(function(){
       // console.log(r + ":" + getPerms());
     });
 
-    // Session.set('tabs', tempInfo);
 
+
+    // Session.set('tabs', tempInfo);
 
 });
 
@@ -82,7 +58,6 @@ Meteor.methods({
     //  return dbi.Name;
   }
   });
-
 
 Handlebars.registerHelper('username', function () {
     var user = Meteor.user();
@@ -141,16 +116,12 @@ Handlebars.registerHelper('users', function () {
   }
 
   function switchTabs(templateName){
-    var t = Session.get('tabs');
-    for(i in t)
-    {
-      console.log(t[i] + ":" + templateName);
-      console.log(t[i] + ":" + (t[i] == templateName) + " switch")
-      if(t[i] == templateName)
-        Session.set(t[i] + 'bool', true);
-      else
-        Session.set(t[i] + 'bool', false);
-    }
+
+    var fragment = Meteor.render( function() {
+      return Template[ templateName ]();
+    });
+    $('#pageContent').html(fragment);
+    console.log("Frag: " + fragment);
   }
 
 
@@ -171,7 +142,8 @@ Handlebars.registerHelper('users', function () {
 
   }
 
-
+  // Template.page.load = function(){
+  // }
 
   Template.welcome.greeting = function () {
     return "Welcome to Flume.";

@@ -9,12 +9,13 @@
   {{> header}}
   <p>Database name: {{dbName}}</p>
 <!-- To be formatted somewhere -->
-{{#if test "Home"}}
+
+{{> page}}
+
+
+<!-- {{#if test "Home"}}
   {{> Home}}
 {{/if}}
-
-
-
 
 {{#if test "Dorem"}}
   {{> Dorem}}
@@ -23,89 +24,7 @@
 {{#if test "Ipsum"}}
   {{> Ipsum}}
 {{/if}}
+ -->
 
 
 </body>
-
-<template name="Home">
-
-
-  {{#if currentUser}}
-	  {{> accountData}}
-  {{/if}}
-  {{> welcome}}
-
-  {{#if currentUser}}
-	  {{> setup}}
-  {{/if}}
-<p>There are {{users}} users.</p>
-
-<p>b</p>
-</template>
-
-<template name="Dorem">
-<p>Dorem!</p>
-</template>
-
-<template name="Ipsum">
-<p>Ipsum-</p>
-</template>
-
-<template name="welcome">
-
-<!--   <h1 style="font-size:72px;">Flume</h1>
- -->  
-  <p>{{greeting}}</p>
-  {{#if currentUser}}
-  {{else}}
-    <p>Please log in or create an account for access to stuff</p>
-  {{/if}}
-  <input type="button" value="Click" />
-  
-</template>
-
-<template name="header">
-
-<img src="icon.png"/>
-<!-- fancier surrounding things todo -->
-
-</template>
-
-<template name="accountData">
-
-<p>Welcome {{username}}. Your permission level is {{perms}}</p>
-{{#if isAdmin}}
-<p>You're an admin!</p>
-{{else}}
-<p>You're not an admin!</p>
-{{/if}}
-<p>{{name}}</p>
-
-</template>
-
-
-<template name="login">
-
-  <div class="span5" style="position:absolute;right:10px;">
-    <div style="float: right">
-      {{loginButtons align="right"}}
-    </div>
-  </div>
-
-</template>
-
-<template name="navbar">
-
-{{{show}}}
-
-</template>
-
-<template name="setup">
-{{#if editDB}}
-<p>Please set the database name.</p>
-<input type="text" id="dbn"/>
-<input type="button" value="Submit" id="send"/>
-{{/if}}
-<p>Hello {{editDB}}</p>
-
-</template>
