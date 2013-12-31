@@ -19,18 +19,18 @@ h1{
 }*/
 
 .adminNav{
-	background: #DD514C;
-}
-
-.adminNav{
-	background: #DD514C;
+/*	background: #DD514C;
+*/	background: #ED615C;
 }
 
 .adminNav:hover{
-	background: #ED615C !important;
+	/*background: #ED615C !important; Whoops, that makes it lighter*/
+/*	background: #CD514C !important;
+*/
+	background: #DD514C !important;
 }
 
 .navbar{
 	cursor:pointer;
-	
+
 }
