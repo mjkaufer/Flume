@@ -1,0 +1,19 @@
+/* CSS declarations go here */
+/*@import url(http://fonts.googleapis.com/css?family=Oswald:400,300|Open+Sans+Condensed:300);*/
+@import url(http://fonts.googleapis.com/css?family=Josefin+Slab:300,400,700);
+
+
+body{
+/*	font-family: Verdana, Geneva, sans-serif;
+*/	margin-left:20px !important;
+	
+}
+
+h1{
+	font-family: 'Josefin Slab', serif;
+}
+
+
+/*.login-buttons{
+
+}*/
