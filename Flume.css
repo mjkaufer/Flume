@@ -17,3 +17,20 @@ h1{
 /*.login-buttons{
 
 }*/
+
+.adminNav{
+	background: #DD514C;
+}
+
+.adminNav{
+	background: #DD514C;
+}
+
+.adminNav:hover{
+	background: #ED615C !important;
+}
+
+.navbar{
+	cursor:pointer;
+	
+}

@@ -14,6 +14,9 @@
 Meteor.startup(function(){
 
 
+
+
+
   Meteor.subscribe('userData');
   Meteor.subscribe('dbi');
   Meteor.subscribe('dbm');
@@ -128,11 +131,14 @@ Handlebars.registerHelper('users', function () {
 
   Template.navbar.show = function(){
 
-    var ret = "<div class='pure-menu pure-menu-open pure-menu-horizontal'><a href='#' class='pure-menu-heading' id='dbin'>" + Session.get('name') + "</a><ul>";
+    var ret = "<div class='pure-menu pure-menu-open pure-menu-horizontal navbar'><a href='#' class='pure-menu-heading' id='dbin'>" + Session.get('name') + "</a><ul>";
     var t = Session.get('tabs');
     for(i in t){
-      ret+="<li id='aa'><a href=" /*todo*/ + "'#' class='tabSwitch' id='" + t[i] + "'>" + t[i] + "</a></li>";
+      ret+="<li id='aa'><a class='tabSwitch' id='" + t[i] + "'>" + t[i] + "</a></li>";
     }
+    if(Meteor.user()!=null)
+    if(getPerms()==-1)
+      ret+="<li id='aa' class='adminNav'><a class='tabSwitch adminNav' id='Admin'>Admin</a></li>";
     ret+="</ul></div>";
     console.log(ret);
 

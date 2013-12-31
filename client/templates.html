@@ -92,3 +92,18 @@
 
 
 </template>
+
+<template name="Admin">
+
+{{#if isAdmin}}
+<p>You're an admin!</p>
+<!-- Magic screens that do the following
+  -Add admins
+  -Add navbar things
+  -Etc. -->
+{{else}}
+<p>You're not an admin! Go away!</p> 
+<!-- the above is kind of redundant because non-admins wouldn't even have access to this... -->
+{{/if}}
+
+</template>

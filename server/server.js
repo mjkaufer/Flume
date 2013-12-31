@@ -1,3 +1,4 @@
+
 dbi = new Meteor.Collection("dbi");
 //Structure {Name:_}
 dbd = new Meteor.Collection("dbd"); //Will contain database data. To be determined based on structure of CMS
@@ -65,6 +66,9 @@ Meteor.publish("userData", function () {
 	  if (options.profile)
 	    user.profile = options.profile;
 	  return user;    	  
+
+
+
 
   });
   // We still want the default hook's 'profile' behavior.
