@@ -3,7 +3,9 @@ dbi = new Meteor.Collection("dbi");
 dbd = new Meteor.Collection("dbd"); //Will contain database data. To be determined based on structure of CMS
 dbm = new Meteor.Collection("dbm");//Database menu header things, {Name:_}
 
-dbm.insert({Name:"Home", Template:"home"});
+
+if(dbm.find({Name:"Home"}).count() == 0)
+dbm.insert({Name:"Home"});
 
 
 
