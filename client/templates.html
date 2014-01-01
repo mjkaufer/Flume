@@ -1,20 +1,5 @@
 
-<template name="Home">
 
-
-  {{#if currentUser}}
-	  {{> accountData}}
-  {{/if}}
-  {{> welcome}}
-
-  {{#if currentUser}}
-	  {{> setup}}
-  {{/if}}
-<p>There are {{users}} users.</p>
-
-
-<p>b</p>
-</template>
 
 <template name="Users">
 
@@ -90,6 +75,7 @@
 
 <template name="page">
 {{load}}
+
 <div id="pageContent">
 
 {{> Home}}
