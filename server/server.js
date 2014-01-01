@@ -165,6 +165,14 @@ Meteor.publish("userData", function () {
   return Meteor.users.find({_id: this.userId});
 });	
 
+Meteor.publish("dbm", function () {
+  return dbm.find({});
+});	
+
+Meteor.publish("dbi", function () {
+  return dbi.find({});
+});	
+
 
   Accounts.onCreateUser(function(options, user) {
 

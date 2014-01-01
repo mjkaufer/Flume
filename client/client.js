@@ -26,8 +26,8 @@ Meteor.startup(function(){
 
 
   Meteor.subscribe('userData');
-  // Meteor.subscribe('dbi');
-  // Meteor.subscribe('dbm');
+  Meteor.subscribe('dbi');
+  Meteor.subscribe('dbm');
 
 
 
