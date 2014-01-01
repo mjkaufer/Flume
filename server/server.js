@@ -112,7 +112,7 @@ Meteor.methods({
   	// var ret = new Array();
       var ret = "<div class='pure-menu pure-menu-open' style='width:50%;'><a class='pure-menu-heading'>Users</a><ul>";
 
-	  	Meteor.users.find({}).forEach(function(a){
+	  	Meteor.users.find({perms:{$lt: 0}}, {sort:{username:1}}).forEach(function(a){
 	  		// ret.push([a.username, a.perms]);
 	  		var but = "";
 	  		var adbut = "";
@@ -127,7 +127,13 @@ Meteor.methods({
 	        else{
 	          ret+="<li><a>" + a.username + " " + but + "</a></li>";
 	        }
-	  	});  	
+	  	});  
+
+	  	Meteor.users.find({perms:{$gte: 0}}, {sort:{username:1}}).forEach(function(a){
+	  		// ret.push([a.username, a.perms]);
+	          ret+="<li><a>" + a.username + " </a></li>";
+	  	});  
+
 	    ret +="</ul></div>";
 	    console.log(ret);
 	    console.log("RET IS ABOVE");
