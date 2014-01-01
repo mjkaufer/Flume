@@ -12,16 +12,15 @@
   {{/if}}
 <p>There are {{users}} users.</p>
 
+
 <p>b</p>
 </template>
 
-<template name="Dorem">
+<!-- <template name="Dorem">
 <p>Dorem!</p>
-</template>
+</template> -->
 
-<template name="Ipsum">
-<p>Ipsum-</p>
-</template>
+
 
 <template name="welcome">
 
@@ -97,6 +96,30 @@
 
 {{#if isAdmin}}
 <p>You're an admin!</p>
+
+<p>This is all case sensitive.</p>
+<p>Add a bar thing to the top.</p>
+<p>Template name:</p>
+<input type="text" id="newTemp"/>
+<input type="button" id="subNew" value="Add a navbar thing!"/>
+
+<p>Remove a bar thing from the top.</p>
+<p>Template name:</p>
+<input type="text" id="remTemp"/>
+<input type="button" id="subRem" value="Remove a navbar thing!"/>
+
+<p>Edit a template</p>
+<p>Template name:</p>
+<input type="text" id="editTempName"/> <input type="button" id="editGetTemp" value="Get current template HTML"/>
+<br>
+
+<textarea rows="10" cols="80" id="editTempData"></textarea>
+<br>
+<input type="button" id="subEdit" value="Push edit"/>
+<br>
+<p>May require a page refresh for stuff to update</p>
+
+
 <!-- Magic screens that do the following
   -Add admins
   -Add navbar things

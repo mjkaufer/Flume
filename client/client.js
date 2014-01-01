@@ -9,17 +9,28 @@
   //   Meteor.call('dbEmpty', function(e, r){return r;console.log(r + ":");});
 
   // }
+SessionAmplify = _.extend({}, Session, {
+  keys: _.object(_.map(amplify.store(), function(value, key) {
+    return [key, JSON.stringify(value)]
+  })),
+  set: function (key, value) {
+    Session.set.apply(this, arguments);
+    amplify.store(key, value);
+  },
+});//for permanent sessions
+
+
 
 
 Meteor.startup(function(){
 
 
-
-
-
   Meteor.subscribe('userData');
-  Meteor.subscribe('dbi');
-  Meteor.subscribe('dbm');
+  // Meteor.subscribe('dbi');
+  // Meteor.subscribe('dbm');
+
+
+
 
 
     Session.set('empty', false);
@@ -45,7 +56,6 @@ Meteor.startup(function(){
       return r && getPerms() == -1;
       // console.log(r + ":" + getPerms());
     });
-
 
 
     // Session.set('tabs', tempInfo);
@@ -104,6 +114,8 @@ Handlebars.registerHelper('users', function () {
 
 
 
+
+
   function dbEmpty(){
       console.log(Session.get('empty') + ":" + getPerms());
 
@@ -132,6 +144,7 @@ Handlebars.registerHelper('users', function () {
   Template.navbar.show = function(){
 
     var ret = "<div class='pure-menu pure-menu-open pure-menu-horizontal navbar'><a href='#' class='pure-menu-heading' id='dbin'>" + Session.get('name') + "</a><ul>";
+    ret+="<li id='aa'><a class='tabSwitch' id='Home'>Home</a></li>";    
     var t = Session.get('tabs');
     for(i in t){
       ret+="<li id='aa'><a class='tabSwitch' id='" + t[i] + "'>" + t[i] + "</a></li>";
@@ -176,6 +189,8 @@ Handlebars.registerHelper('users', function () {
   }
 
 
+
+
   Template.welcome.events({
     'click input' : function () {
       // template data, if any, is available in 'this'
@@ -183,6 +198,61 @@ Handlebars.registerHelper('users', function () {
         console.log("You pressed the button");
     }
   });
+
+  Template.Admin.events({
+    'click #subNew' : function () {
+
+      if(getPerms() == -1 && $('#newTemp').val() && $('#newTemp').val() != ''){
+        var submit = $('#newTemp').val().trim();
+        Meteor.call('addNav', submit, Meteor.user(), function(e, r){
+          console.log('You added the menu ' + r);
+
+          Meteor.call('writeTemplate', r, 'Nothing here yet.', Meteor.user(), function(e, r){
+            console.log(r);
+          });
+        });
+        $('#newTemp').val("");        
+
+      }
+    },
+    'click #subRem' : function () {
+
+      if(getPerms() == -1 && $('#remTemp').val() && $('#remTemp').val() != ''){
+        var submit = $('#remTemp').val().trim();
+        Meteor.call('remNav', submit, Meteor.user(), function(e, r){
+          console.log('You removed the menu ' + r);
+        });
+        $('#remTemp').val("");        
+
+
+      }
+    },
+    'click #subEdit' : function () {
+
+      if(getPerms() == -1 && $('#editTempName').val() && $('#editTempName').val() != '' && $('#editTempData').val() && $('#editTempData').val() != ''){
+        var submit = $('#editTempData').val().trim();
+        var submitName = $('#editTempName').val().trim();
+        Meteor.call('writeTemplate', submitName, submit, Meteor.user(), function(e, r){
+          console.log('You edited the menu ' + r);
+        });
+        $('#editTempData').val("");    
+        $('#editTempName').val("");        
+      }
+    },
+    'click #editGetTemp' : function () {
+
+      if(getPerms() == -1 && $('#editTempName').val() && $('#editTempName').val() != ''){
+        var submitName = $('#editTempName').val().trim();
+        console.log(submitName + "EDITGETTEMP");
+        Meteor.call('retTemplate', submitName, Meteor.user(), function(e, r){
+          console.log(r);
+          $('#editTempData').val(r);
+        });
+        $('#editTempName').val("");        
+      }
+    }        
+
+  });  
 
   Template.navbar.events({
       'click .tabSwitch' : function(e, t){
