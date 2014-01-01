@@ -34,7 +34,7 @@ Meteor.methods({
   	return ret;
   }, writeTemplate: function(templateName, input, user){
 
-  	if(user.perms != -1){
+  	if(user.perms > -1 ){
   		console.log('not an admin');
   		return;
   	}
@@ -60,18 +60,18 @@ Meteor.methods({
 
 
   }, addNav: function(navName, user){
-  	if(user.perms != -1)
+  	if(user.perms > -1)
   		return;
   	dbm.insert({Name: navName});
   	return navName;
   }, remNav: function(navName, user){
-  	if(user.perms != -1)
+  	if(user.perms > -1)
   		return;
   	dbm.remove({Name: navName});
   	return navName;
   }, retTemplate: function(templateName, user){
 
-  	if(user.perms != -1){
+  	if(user.perms > -1){
   		console.log('not an admin');
   		return;
   	}
@@ -107,31 +107,44 @@ Meteor.methods({
     // 	setTimeout(function(){console.log('waiting');}, 10);
     // }
     // return ret;    
-  }, lu: function(){
-
-
+  }, lu: function(user){
 
   	// var ret = new Array();
       var ret = "<div class='pure-menu pure-menu-open' style='width:50%;'><a class='pure-menu-heading'>Users</a><ul>";
 
 	  	Meteor.users.find({}).forEach(function(a){
 	  		// ret.push([a.username, a.perms]);
-	        if(a.perms == -1)//admin
-	          ret+="<li class='admin'><a class='admin'><strong>" + a.username + "</strong></a></li>";
-	        else
-	          ret+="<li><a>" + a.username + "</a></li>";
+	  		var but = "";
+	  		var adbut = "";
+	  		if(user)
+	  			if(user.perms == -2 && a.perms != -2){
+	  				but += "<input type='button' id='" + a.username + "' class='makeAdmin' style='float:right;' value='Make this user an admin!'/>";
+	  				adbut += "<input type='button' id='" + a.username + "' class='removeAdmin' style='float:right;' value='Revoke this user's adminship.'/>";
+	  			}
+	        if(a.perms <= -1){//admin
+		          ret+="<li class='admin'><a class='admin'><strong>" + a.username + "</strong>" + adbut + "</a></li>";
+	        }
+	        else{
+	          ret+="<li><a>" + a.username + " " + but + "</a></li>";
+	        }
 	  	});  	
 	    ret +="</ul></div>";
 	    console.log(ret);
 	    console.log("RET IS ABOVE");
 	    return ret;
+  }, promoteUser: function(promoteeName, user){
+  	if(user.perms >= -1)
+  		return;
 
+	Meteor.users.update({username: promoteeName },{ $set: {perms: -1}});
+	console.log(Meteor.users.find({username: promoteeName}).perms);
+  	return promoteeName + " is an admin.";
+  }, demoteUser: function(demoteeName, user){
+  	if(user.perms >= -1)
+  		return;
+	Meteor.users.update({username: demoteeName },{ $set: {perms: 0}});
+  	return promoteeName + " is a normal person";
 
-
-
-
-
-  	return ret;
   }
 
  //  getUserData: function(){
@@ -147,9 +160,11 @@ Meteor.methods({
 
 
 
+
 Meteor.publish("userData", function () {
   return Meteor.users.find({_id: this.userId});
 });	
+
 
   Accounts.onCreateUser(function(options, user) {
 
@@ -157,19 +172,15 @@ Meteor.publish("userData", function () {
       if(r == 0)
       {
       	console.log('admin');
-      	user.perms = -1;
+      	user.perms = -2;
       }
       else{
-      console.log('normal');
-      user.perms = 0;
+	    console.log('normal');
+	    user.perms = 0;
   	  }
 	  if (options.profile)
 	    user.profile = options.profile;
 	  return user;    	  
-
-
-
-
   });
 
 

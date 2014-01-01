@@ -35,7 +35,7 @@ Meteor.startup(function(){
 
     Session.set('empty', false);
     Session.set('name', "Flume");
-    Session.set('users', '');
+    Session.set('userL', '');
     // switchTabs('Home');
 
     Meteor.call('getTabs', function(e, r){
@@ -54,7 +54,7 @@ Meteor.startup(function(){
       Session.set('empty', r);
       console.log(r + ":" + getPerms());
       Template.setup.editDB;
-      return r && getPerms() == -1;
+      return r && getPerms() <= -1;
       // console.log(r + ":" + getPerms());
     });
 
@@ -94,7 +94,7 @@ Handlebars.registerHelper('isAdmin', function () {
     if (_.isUndefined(user) || _.isNull(user)) {
       return false;
     }
-    if(user.perms == -1)
+    if(user.perms <= -1)
       return true;
     return false;
 });
@@ -120,7 +120,7 @@ Handlebars.registerHelper('users', function () {
   function dbEmpty(){
       console.log(Session.get('empty') + ":" + getPerms());
 
-      return Session.get('empty') && getPerms() == -1;
+      return Session.get('empty') && getPerms() <= -1;
   }
 
   function getPerms(){
@@ -153,7 +153,7 @@ Handlebars.registerHelper('users', function () {
       ret+="<li id='aa'><a class='tabSwitch' id='" + t[i] + "'>" + t[i] + "</a></li>";
     }
     if(Meteor.user()!=null)
-    if(getPerms()==-1)
+    if(getPerms()<=-1)
       ret+="<li id='aa' class='adminNav'><a class='tabSwitch adminNav' id='Admin'>Admin</a></li>";
     ret+="</ul></div>";
     console.log(ret);
@@ -182,7 +182,7 @@ Handlebars.registerHelper('users', function () {
 
   Template.setup.editDB = function(){
     // console.log("GP: " + getPerms() + ":" + "DBF" + dbEmpty());
-    // return (getPerms() == -1 && dbEmpty());
+    // return (getPerms() <= -1 && dbEmpty());
     return dbEmpty();
   }
 
@@ -194,16 +194,32 @@ Handlebars.registerHelper('users', function () {
 
   Template.Users.listUsers = function(){
 
-    Meteor.call('lu', function(e, r){
+    Meteor.call('lu', Meteor.user(), function(e, r){
       console.log(r);
-      Session.set('users', r);
-      return Session.get('users');
+      Session.set('userL', r);
+      return Session.get('userL');
 
     });
-    return Session.get('users');
+    return Session.get('userL');
 
   }
 
+  Template.Users.events({
+      'click .makeAdmin' : function(e, t){
+        console.log(e.currentTarget.id + "Current");
+        var un = e.currentTarget.id;
+        Meteor.call('promoteUser', un, Meteor.user(), function(e, r){
+          console.log(r);
+        })
+      },
+      'click .removeAdmin' : function(e, t){
+        console.log(e.currentTarget.id + "Current");
+        var un = e.currentTarget.id;
+        Meteor.call('demoteUser', un, Meteor.user(), function(e, r){
+          console.log(r);
+        })
+      }      
+  });
 
 
   Template.welcome.events({
@@ -217,7 +233,7 @@ Handlebars.registerHelper('users', function () {
   Template.Admin.events({
     'click #subNew' : function () {
 
-      if(getPerms() == -1 && $('#newTemp').val() && $('#newTemp').val() != ''){
+      if(getPerms() <= -1 && $('#newTemp').val() && $('#newTemp').val() != ''){
         var submit = $('#newTemp').val().trim();
         Meteor.call('addNav', submit, Meteor.user(), function(e, r){
           console.log('You added the menu ' + r);
@@ -232,7 +248,7 @@ Handlebars.registerHelper('users', function () {
     },
     'click #subRem' : function () {
 
-      if(getPerms() == -1 && $('#remTemp').val() && $('#remTemp').val() != ''){
+      if(getPerms() <= -1 && $('#remTemp').val() && $('#remTemp').val() != ''){
         var submit = $('#remTemp').val().trim();
         Meteor.call('remNav', submit, Meteor.user(), function(e, r){
           console.log('You removed the menu ' + r);
@@ -244,7 +260,7 @@ Handlebars.registerHelper('users', function () {
     },
     'click #subEdit' : function () {
 
-      if(getPerms() == -1 && $('#editTempName').val() && $('#editTempName').val() != '' && $('#editTempData').val() && $('#editTempData').val() != ''){
+      if(getPerms() <= -1 && $('#editTempName').val() && $('#editTempName').val() != '' && $('#editTempData').val() && $('#editTempData').val() != ''){
         var submit = $('#editTempData').val().trim();
         var submitName = $('#editTempName').val().trim();
         Meteor.call('writeTemplate', submitName, submit, Meteor.user(), function(e, r){
@@ -256,7 +272,7 @@ Handlebars.registerHelper('users', function () {
     },
     'click #editGetTemp' : function () {
 
-      if(getPerms() == -1 && $('#editTempName').val() && $('#editTempName').val() != ''){
+      if(getPerms() <= -1 && $('#editTempName').val() && $('#editTempName').val() != ''){
         var submitName = $('#editTempName').val().trim();
         console.log(submitName + "EDITGETTEMP");
         Meteor.call('retTemplate', submitName, Meteor.user(), function(e, r){
