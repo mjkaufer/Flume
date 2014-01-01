@@ -35,6 +35,7 @@ Meteor.startup(function(){
 
     Session.set('empty', false);
     Session.set('name', "Flume");
+    Session.set('users', '');
     // switchTabs('Home');
 
     Meteor.call('getTabs', function(e, r){
@@ -145,6 +146,8 @@ Handlebars.registerHelper('users', function () {
 
     var ret = "<div class='pure-menu pure-menu-open pure-menu-horizontal navbar'><a href='#' class='pure-menu-heading' id='dbin'>" + Session.get('name') + "</a><ul>";
     ret+="<li id='aa'><a class='tabSwitch' id='Home'>Home</a></li>";    
+    ret+="<li id='aa'><a class='tabSwitch' id='Users'>Users</a></li>";    
+
     var t = Session.get('tabs');
     for(i in t){
       ret+="<li id='aa'><a class='tabSwitch' id='" + t[i] + "'>" + t[i] + "</a></li>";
@@ -188,6 +191,18 @@ Handlebars.registerHelper('users', function () {
     return Session.get('tabs');
   }
 
+
+  Template.Users.listUsers = function(){
+
+    Meteor.call('lu', function(e, r){
+      console.log(r);
+      Session.set('users', r);
+      return Session.get('users');
+
+    });
+    return Session.get('users');
+
+  }
 
 
 

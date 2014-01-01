@@ -34,3 +34,12 @@ h1{
 	cursor:pointer;
 
 }
+
+.admin{
+	background: #ED615C;
+	color:#fff !important;
+}
+.admin:hover{
+	background: #DD514C !important;
+	color: #eee !important;
+}

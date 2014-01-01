@@ -107,6 +107,31 @@ Meteor.methods({
     // 	setTimeout(function(){console.log('waiting');}, 10);
     // }
     // return ret;    
+  }, lu: function(){
+
+
+
+  	// var ret = new Array();
+      var ret = "<div class='pure-menu pure-menu-open' style='width:50%;'><a class='pure-menu-heading'>Users</a><ul>";
+
+	  	Meteor.users.find({}).forEach(function(a){
+	  		// ret.push([a.username, a.perms]);
+	        if(a.perms == -1)//admin
+	          ret+="<li class='admin'><a class='admin'><strong>" + a.username + "</strong></a></li>";
+	        else
+	          ret+="<li><a>" + a.username + "</a></li>";
+	  	});  	
+	    ret +="</ul></div>";
+	    console.log(ret);
+	    console.log("RET IS ABOVE");
+	    return ret;
+
+
+
+
+
+
+  	return ret;
   }
 
  //  getUserData: function(){
