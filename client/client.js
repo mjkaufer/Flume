@@ -248,7 +248,6 @@ Handlebars.registerHelper('users', function () {
           console.log(r);
           $('#editTempData').val(r);
         });
-        $('#editTempName').val("");        
       }
     }        
 
