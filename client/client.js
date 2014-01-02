@@ -133,6 +133,11 @@ Handlebars.registerHelper('users', function () {
 
   function switchTabs(templateName){
 
+  if(templateName=="Home")
+  document.title = Session.get('name');    
+  else
+  document.title = templateName;
+
     var fragment = Meteor.render( function() {
       return Template[ templateName ]();
     });
@@ -291,7 +296,14 @@ Handlebars.registerHelper('users', function () {
         // console.log(t.find(this))
         console.log(e.currentTarget.id + "Current");
         switchTabs(e.currentTarget.id);
-      }
+      },
+      'click #dbin' : function(e, t){
+        // console.log(this == $(this)[0]);
+        // console.log($(this)[0].id);
+        // console.log(this.id);
+        // console.log(t.find(this))
+        switchTabs("Home");
+      }      
   });
 
   Template.setup.events({
@@ -300,6 +312,7 @@ Handlebars.registerHelper('users', function () {
       console.log('a');
       Session.set('name', $('#dbn').val());      
       $('#dbin').text(Session.get('name'));
+      document.title = Session.get('name');      
       Meteor.call('setDBName', $('#dbn').val(), function(e, r){
       console.log(r);
       Session.set('empty', false);
