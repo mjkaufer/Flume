@@ -164,8 +164,7 @@ Handlebars.registerHelper('users', function () {
 
   }
 
-  // Template.page.load = function(){
-  // }
+
 
   Template.welcome.greeting = function () {
     return "Welcome to Flume.";
