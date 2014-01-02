@@ -138,11 +138,32 @@ Handlebars.registerHelper('users', function () {
   else
   document.title = templateName;
 
-    var fragment = Meteor.render( function() {
+  var defaultTabs = ["Home", "Users", "Admin"];
+  var fragment = "There was an error.";
+  if(defaultTabs.indexOf(templateName) != -1){
+    fragment = Meteor.render( function() {
       return Template[ templateName ]();
     });
     $('#pageContent').html(fragment);
-    console.log("Frag: " + fragment);
+    console.log("Frag: " + fragment);    
+  }
+  else{
+    Meteor.call('getPage', templateName, function(e, r){
+    // var tmpl = Template.__define__("temptemp", function () { 
+    //     return r; 
+    // });
+
+    //   console.log(tmpl);
+    //   fragment = Meteor.render( function() {
+    //     return tmpl();
+    //   });      
+    //   console.log(fragment);
+    //   $('#pageContent').html(fragment);
+    //   console.log("Frog: " + fragment);
+    $('#pageContent').html(r);
+    });
+  }
+
   }
 
 
@@ -242,9 +263,9 @@ Handlebars.registerHelper('users', function () {
         Meteor.call('addNav', submit, Meteor.user(), function(e, r){
           console.log('You added the menu ' + r);
 
-          Meteor.call('writeTemplate', r, 'Nothing here yet.', Meteor.user(), function(e, r){
-            console.log(r);
-          });
+          // Meteor.call('writeTemplate', r, 'Nothing here yet.', Meteor.user(), function(e, r){
+          //   console.log(r);
+          // });
         });
         $('#newTemp').val("");        
 
@@ -267,8 +288,16 @@ Handlebars.registerHelper('users', function () {
       if(getPerms() <= -1 && $('#editTempName').val() && $('#editTempName').val() != '' && $('#editTempData').val() && $('#editTempData').val() != ''){
         var submit = $('#editTempData').val().trim();
         var submitName = $('#editTempName').val().trim();
+        console.log(submitName + "SUBMIT");
+
+        if(["Users", "Admin"].indexOf(submitName) != -1){
+          $('#editTempName').val("You can't edit " + submitName + ".");
+          console.log('err');
+          return;
+        }        
+        var submitName = $('#editTempName').val().trim();
         Meteor.call('writeTemplate', submitName, submit, Meteor.user(), function(e, r){
-          console.log('You edited the menu ' + r);
+          console.log('You edited the menu ' + submitName);
         });
         $('#editTempData').val("");    
         $('#editTempName').val("");        
@@ -278,8 +307,23 @@ Handlebars.registerHelper('users', function () {
 
       if(getPerms() <= -1 && $('#editTempName').val() && $('#editTempName').val() != ''){
         var submitName = $('#editTempName').val().trim();
+        console.log(submitName + "SUBMIT");
+        if(["Users", "Admin"].indexOf(submitName) != -1){
+          $('#editTempName').val("You can't edit " + submitName + ".");
+          return;
+        }
+        if(submitName == "Home"){
+          $('#editTempData').val(Template["Home"]);
+
+         fragment = Meteor.render( function() {
+            return Template[ "Home" ]();
+          });
+
+          return;
+
+        }
         console.log(submitName + "EDITGETTEMP");
-        Meteor.call('retTemplate', submitName, Meteor.user(), function(e, r){
+        Meteor.call('getPage', submitName, function(e, r){
           console.log(r);
           $('#editTempData').val(r);
         });

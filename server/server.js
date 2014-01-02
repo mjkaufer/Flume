@@ -3,7 +3,7 @@
 dbi = new Meteor.Collection("dbi");
 //Structure {Name:_}
 dbd = new Meteor.Collection("dbd"); //Will contain database data. To be determined based on structure of CMS
-dbm = new Meteor.Collection("dbm");//Database menu header things, {Name:_}
+dbm = new Meteor.Collection("dbm");//Database menu header things, {Name:_, Content:_}
 
 
 
@@ -38,31 +38,36 @@ Meteor.methods({
   		console.log('not an admin');
   		return;
   	}
-	var fs = Npm.require('fs');
-	var templateInput = "<template name='" + templateName + "'>\n" + input + "\n</template>";
-    fs.writeFile("./../../../../../client/" + templateName + ".html", templateInput, function(err) {
-    if(err){
-        console.log(err + ":ABCDEFG");
-        return "ERROR!!!!!";
-    }
-    else{
-        console.log("The template " + templateName + " was saved!");
 
-        return "It is done";
-    }
+  	dbm.update({Name: templateName}, {$set: {Content: input}});
+  	return dbm.findOne({Name:templateName}).Content;
+
+
+	// var fs = Npm.require('fs');
+	// var templateInput = "<template name='" + templateName + "'>\n" + input + "\n</template>";
+ //    fs.writeFile("./../../../../../client/" + templateName + ".html", templateInput, function(err) {
+ //    if(err){
+ //        console.log(err + ":ABCDEFG");
+ //        return "ERROR!!!!!";
+ //    }
+ //    else{
+ //        console.log("The template " + templateName + " was saved!");
+
+ //        return "It is done";
+ //    }
 
     // fs.readFile("./../../../../../server/test.txt",{encoding: 'utf8'}, function(err, data){
     // 	if(err)throw err;
     // 	console.log(data);
     // });
 
-    }); 
+    // }); 
 
 
   }, addNav: function(navName, user){
   	if(user.perms > -1)
   		return;
-  	dbm.insert({Name: navName});
+  	dbm.insert({Name: navName, Content:"<p>Nothing here yet</p>"});
   	return navName;
   }, remNav: function(navName, user){
   	if(user.perms > -1)
@@ -75,35 +80,35 @@ Meteor.methods({
   		console.log('not an admin');
   		return;
   	}
+  	return dbm.find({Name: templateName}).Content;
  	
-  	var Future = Npm.require('fibers/future');
-  	var fut = new Future();
+ //  	var Future = Npm.require('fibers/future');
+ //  	var fut = new Future();
 
-	var fs = Npm.require('fs');
-	var ret;
-    fs.readFile("./../../../../../client/" + templateName + ".html",{encoding: 'utf8'}, function(err, data) {
+	// var fs = Npm.require('fs');
+	// var ret;
+ //    fs.readFile("./../../../../../client/" + templateName + ".html",{encoding: 'utf8'}, function(err, data) {
+ //    if(err){
+ //        console.log(err + ":ABCDEFG");
+ //        return "ERROR!!!!!";
+ //    }
+ //    	console.log('a');
+ //    	console.log(templateName + ".html");
+ //    	console.log(data + "");
+ //    	console.log(data);
+ //    	 // var firstTemp = "<template name='" + templateName + "'>";
+ //      //    data = data.substr(firstTemp.length, data.length - 11);//11 is the charcount of </template>
 
-    if(err){
-        console.log(err + ":ABCDEFG");
-        return "ERROR!!!!!";
-    }
-    	console.log('a');
-    	console.log(templateName + ".html");
-    	console.log(data + "");
-    	console.log(data);
-    	 // var firstTemp = "<template name='" + templateName + "'>";
-      //    data = data.substr(firstTemp.length, data.length - 11);//11 is the charcount of </template>
+ //      	data = data.replace("<template name='" + templateName + "'>", "");
+ //      	data = data.replace("</template>", "");
+ //        fut['return'](data);
 
-      	data = data.replace("<template name='" + templateName + "'>", "");
-      	data = data.replace("</template>", "");
-        fut['return'](data);
+ //    }); 
 
-    }); 
-
-    console.log(ret);
-    console.log("ret above");
-    console.log(!ret || ret == null || ret == 'undefined' || ret==undefined);
-    return fut.wait();
+ //    console.log(ret);
+ //    console.log("ret above");
+ //    console.log(!ret || ret == null || ret == 'undefined' || ret==undefined);
+ //    return fut.wait();
     // while(!ret || ret == null || ret == 'undefined' || ret==undefined){
     // 	setTimeout(function(){console.log('waiting');}, 10);
     // }
@@ -159,6 +164,12 @@ Meteor.methods({
 	Meteor.users.update({username: demoteeName },{ $set: {perms: 0}});
   	return promoteeName + " is a normal person";
 
+  },getPage: function(pageName){
+  	console.log('getPage');
+  	console.log(pageName);
+  	console.log(dbm.findOne({Name: pageName}).Content);
+
+  	return dbm.findOne({Name: pageName}).Content;
   }
 
  //  getUserData: function(){
