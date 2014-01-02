@@ -146,7 +146,7 @@ Meteor.methods({
 	console.log(Meteor.users.find({username: promoteeName}).perms);
   	return promoteeName + " is an admin.";
   }, demoteUser: function(demoteeName, user){
-  	if(user.perms >= -1)
+  	if(user.perms == -2) //headadmin
   		return;
 	Meteor.users.update({username: demoteeName },{ $set: {perms: 0}});
   	return promoteeName + " is a normal person";
