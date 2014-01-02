@@ -93,6 +93,7 @@ Meteor.methods({
     	console.log(data);
     	 // var firstTemp = "<template name='" + templateName + "'>";
       //    data = data.substr(firstTemp.length, data.length - 11);//11 is the charcount of </template>
+
       	data = data.replace("<template name='" + templateName + "'>", "");
       	data = data.replace("</template>", "");
         fut['return'](data);
@@ -112,26 +113,33 @@ Meteor.methods({
   	// var ret = new Array();
       var ret = "<div class='pure-menu pure-menu-open' style='width:50%;'><a class='pure-menu-heading'>Users</a><ul>";
 
-	  	Meteor.users.find({perms:{$lt: 0}}, {sort:{username:1}}).forEach(function(a){
-	  		// ret.push([a.username, a.perms]);
 	  		var but = "";
 	  		var adbut = "";
+
+	  	Meteor.users.find({perms:{$lt: 0}}, {sort:{username:1}}).forEach(function(a){
+	  		// ret.push([a.username, a.perms]);
+
 	  		if(user)
 	  			if(user.perms == -2 && a.perms != -2){
-	  				but += "<input type='button' id='" + a.username + "' class='makeAdmin' style='float:right;' value='Make this user an admin!'/>";
-	  				adbut += "<input type='button' id='" + a.username + "' class='removeAdmin' style='float:right;' value='Revoke this user's adminship.'/>";
+	  				// but = "<input type='button' id='" + a.username + "' class='makeAdmin' style='float:right;' value='Make this user an admin!'/>";
+	  				adbut = "<input type='button' id='" + a.username + "' class='removeAdmin' style='float:right;' value='Revoke this user's adminship.'/>";
 	  			}
-	        if(a.perms <= -1){//admin
-		          ret+="<li class='admin'><a class='admin'><strong>" + a.username + "</strong>" + adbut + "</a></li>";
-	        }
-	        else{
-	          ret+="<li><a>" + a.username + " " + but + "</a></li>";
-	        }
+	  		else
+	  			but = adbut = "";
+
+		    ret+="<li class='admin'><a class='admin'><strong>" + a.username + "</strong>" + adbut + "</a></li>";
 	  	});  
 
 	  	Meteor.users.find({perms:{$gte: 0}}, {sort:{username:1}}).forEach(function(a){
 	  		// ret.push([a.username, a.perms]);
-	          ret+="<li><a>" + a.username + " </a></li>";
+	  		if(user)
+	  			if(user.perms == -2 && a.perms != -2){
+	  				but = "<input type='button' id='" + a.username + "' class='makeAdmin' style='float:right;' value='Make this user an admin!'/>";
+	  			}
+	  		else
+	  			but = adbut = "";		
+	          ret+="<li><a>" + a.username + " " + but + " </a></li>";
+
 	  	});  
 
 	    ret +="</ul></div>";
